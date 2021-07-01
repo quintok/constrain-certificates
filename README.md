@@ -20,3 +20,12 @@ This stuff is hard.
 3. Remove `my.example.com` in your HOSTS file
 4. Remove `bad.tld` in your HOSTS file
 6. Remove the "Example Root CA" certificate from your local trust store.
+
+# What do I need to know?
+1. in intermediate.conf is the crux of the code.  It uses name constraints saying `.example.com` is the only valid dns under this CA.  That's why 'bad' doesn't work
+
+# Things I learnt
+1. Chrome doesn't like v1 CAs, which is why I had to use `-extensions v3_ca` and added the `root.conf` file.
+2. `conf` files are very complicated and can do a *lot*
+3. `openssl s_client -connect` is pretty quiet about the failure for bad.tld.  The second last line says "Verify return code" which is 20 for bad.tld.  Otherwise you wouldn't know.
+4. Not everything bothers to check the trust chain for name constraints

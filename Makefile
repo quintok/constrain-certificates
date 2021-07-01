@@ -1,11 +1,3 @@
-# if this session isn't interactive, then we don't want to allocate a
-# TTY, which would fail, but if it is interactive, we do want to attach
-# so that the user can send e.g. ^C through.
-INTERACTIVE := $(shell [ -t 0 ] && echo 1 || echo 0)
-ifeq ($(INTERACTIVE), 1)
-	DOCKER_FLAGS += -t
-endif
-
 .PHONY: help
 help:
 	@echo -e "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/' | column -c2 -t -s :)"
@@ -55,7 +47,7 @@ sign-intermediate:
 	-CAkey ./out/root/key.pem \
 	-CAcreateserial \
 	-out ./out/intermediate/cert.crt \
-    -extfile intermediate.conf
+	-extfile intermediate.conf
 
 .PHONY: build-certificate
 build-certificate:
